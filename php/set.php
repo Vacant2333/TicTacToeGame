@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 $d='../data/set.data';
 $set=explode(':',file_get_contents($d));
@@ -21,3 +22,6 @@ color
 
 */
 ?>
+=======
+
+>>>>>>> origin/master
