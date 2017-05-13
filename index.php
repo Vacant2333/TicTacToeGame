@@ -78,6 +78,7 @@
 <script>
 var $ccc;
 var $step;
+var $w;
 
 function returnlog()
 {
@@ -90,6 +91,8 @@ function returnlog()
     error : function() 
 	{} 
 	});
+	$w=null;
+	$step='black';
 }
 
 function set($line,$columna)
@@ -106,6 +109,16 @@ function set($line,$columna)
 						"color" : $ccc
 					},
 					dataType: 'json',
+					success:function(data)
+					{
+						if(data['success'])
+						{
+							if($ccc=='black')
+								alert('黑色胜利');
+							if($ccc=='white')
+								alert('白色胜利');
+						}
+					}
 				});
 	}
 }
@@ -124,11 +137,36 @@ function ChooseColor($color)
 	}
 	document.getElementById("CC").style.display='none';
 	document.getElementById("Game").style.display='block';
-	setInterval('get()',300);
+	setInterval('get()',250);
+}
+
+function getData(url,fnSucc,fnFaild)
+{
+	if(window.XMLHttpRequest)
+		var oAjax=new XMLHttpRequest();
+	else
+		var oAjax=new ActiveXObject("Microsoft.XMLHTTP");
+	
+	 oAjax.open('GET',url,true);
+	 oAjax.send();
+	 oAjax.onreadystatechange=function()
+		{
+		  if(oAjax.readyState==4)
+		  {
+				if(oAjax.status==200)
+				{ 
+						fnSucc(oAjax.responseText);  
+				}
+				else
+				{
+					fnFaild(oAjax.status);
+				}
+			};
+	 };
 }
 
 function get()
-{	
+{
 	$.ajax({
     type: 'get',
     url: "php/ajaxlog.php",
@@ -136,7 +174,9 @@ function get()
     success:function(data)
 	{
 		$m=data['msg'].split(":");
-		$none=0;//没下的棋子数量
+		getData('data/win.data?datetime=new Date.getTime ',function(str){if(str=='white' || str=='black'){$w=str;}else{$w=null;}},function(){})
+
+		$none=0;
 		$m.forEach(function($sm)
 		{
 			$sm=$sm.split("-");
@@ -152,9 +192,10 @@ function get()
 				$none++;
 			}	
 		});
-		if($none==0)//全下完了
+		if($none==0 || $w!=null)
 		{
 			document.getElementById('msg').innerHTML='游戏结束';
+			$step="over";
 		}
 		else
 		{
@@ -170,6 +211,7 @@ function get()
 			break;
 			}
 		}
+
      },
     error : function() 
 	{} 
