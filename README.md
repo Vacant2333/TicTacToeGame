@@ -1,2 +1,3 @@
 # TicTacToeGame
-a Simple TicTacToe Web game.
+a Simple TicTacToe Web Game.
+Just For Fun.
