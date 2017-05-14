@@ -80,6 +80,14 @@ var $ccc;
 var $step;
 var $w;
 
+var bw=document.createElement("audio");
+bw.preload="auto";
+bw.src="wav/bwin.wav";
+
+var ww=document.createElement("audio");
+ww.preload="auto";
+ww.src="wav/wwin.wav";
+
 function returnlog()
 {
 	$.ajax({
@@ -89,7 +97,7 @@ function returnlog()
     success:function(data)
 	{},
     error : function() 
-	{} 
+	{}
 	});
 	$w=null;
 	$step='black';
@@ -114,9 +122,17 @@ function set($line,$columna)
 						if(data['success'])
 						{
 							if($ccc=='black')
+							{
+								bw.play();
+								$w="black";
 								alert('黑色胜利');
+							}
 							if($ccc=='white')
+							{
+								ww.play();
+								$w="white";
 								alert('白色胜利');
+							}
 						}
 					}
 				});
@@ -146,22 +162,21 @@ function getData(url,fnSucc,fnFaild)
 		var oAjax=new XMLHttpRequest();
 	else
 		var oAjax=new ActiveXObject("Microsoft.XMLHTTP");
-	
 	 oAjax.open('GET',url,true);
 	 oAjax.send();
 	 oAjax.onreadystatechange=function()
-		{
-		  if(oAjax.readyState==4)
-		  {
-				if(oAjax.status==200)
-				{ 
-						fnSucc(oAjax.responseText);  
-				}
-				else
-				{
-					fnFaild(oAjax.status);
-				}
-			};
+	{
+	  if(oAjax.readyState==4)
+	  {
+			if(oAjax.status==200)
+			{ 
+					fnSucc(oAjax.responseText);  
+			}
+			else
+			{
+				fnFaild(oAjax.status);
+			}
+		};
 	 };
 }
 
@@ -174,7 +189,7 @@ function get()
     success:function(data)
 	{
 		$m=data['msg'].split(":");
-		getData('data/win.data?datetime=new Date.getTime ',function(str){if(str=='white' || str=='black'){$w=str;}else{$w=null;}},function(){})
+		getData('data/win.data?datetime=new Date.getTime ',function(str){if(str=='white' || str=='black'){$w=str;}else{$w=null;}},function(){});
 
 		$none=0;
 		$m.forEach(function($sm)
@@ -190,8 +205,9 @@ function get()
 				document.getElementById($sm[0]).innerHTML='<h2>下棋</h2>';
 				document.getElementById($sm[0]).style.backgroundColor='blue';
 				$none++;
-			}	
+			}
 		});
+		
 		if($none==0 || $w!=null)
 		{
 			document.getElementById('msg').innerHTML='游戏结束';
@@ -211,7 +227,6 @@ function get()
 			break;
 			}
 		}
-
      },
     error : function() 
 	{} 
