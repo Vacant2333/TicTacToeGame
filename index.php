@@ -35,12 +35,12 @@
 </style>
 </head>
 <body>
-	<div id="herder"><h1><center>井字棋</h1></center></div>
+	<div id="herder"><h1><center>[井字棋]</h1></center></div>
 	
 	<div id="main">
 		<div class="main-left">
 		<textarea id="msg"  style="font-size:30px; color:#F00; height:180px; width:100%; resize:none;" readonly="readonly">
-			步骤
+			请选择颜色
 		</textarea>
 			<button type="submit" onclick="returnlog()"><h2>重新开始</h2></button>
 			<div id="color">你的颜色:未知</div>
